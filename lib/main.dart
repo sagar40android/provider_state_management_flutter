@@ -1,30 +1,20 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:providerstatemanagementflutter/MyCounterApp.dart';
 
-class Data extends ChangeNotifier{
-  int counter=0;
- void incrementCount(){
-    counter++;
-    notifyListeners();
-  }
+import 'Data.dart';
 
-  void decrement(){
-   if (counter >0){
-     counter--;
-     notifyListeners();
-   }
 
-  }
-}
 
-void main() => runApp(MyApp());
+// void main() => runApp(MyApp());
+void main() => runApp(MyCounterApp());
 
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MultiProvider(
-      providers: [ChangeNotifierProvider<Data>.value(value: Data())
+      providers: [ChangeNotifierProvider<Counter>.value(value: Counter())
       ],
       child: MaterialApp(
         home: MyHomePage(),
@@ -42,26 +32,32 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
-    final DataClassListner= Provider.of<Data>(context,listen: false);
+    final DataClassListner= Provider.of<Counter>(context,listen: false);
 
-    return Scaffold(
-      body:  Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: <Widget>[
-            Text(Provider.of<Data>(context,listen: false).counter.toString()),
-            RaisedButton(onPressed: (){
-              Provider.of<Data>(context,listen: false).incrementCount();
-            }
-            ,child: Text("+"),),
-            RaisedButton(onPressed: (){
-              Provider.of<Data>(context,listen: false).decrement();
-            }
-              ,child: Text("-"),)
-          ],
+    return SafeArea(
+      top: true,
+      child: Scaffold(
+        appBar:AppBar(
+          title: Text("provider state"),
         ),
-      )
+        body:  Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: <Widget>[
+              Text(Provider.of<Counter>(context,listen: true).counter.toString()),
+              RaisedButton(onPressed: (){
+                Provider.of<Counter>(context,listen: false).incrementCount();
+              }
+              ,child: Text("+"),),
+              RaisedButton(onPressed: (){
+                Provider.of<Counter>(context,listen: false).decrement();
+              }
+                ,child: Text("-"),)
+            ],
+          ),
+        )
+      ),
     );
   }
 }
