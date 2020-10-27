@@ -144,9 +144,11 @@ class _MyCounterHomeAppState extends State<MyCounterHomeApp> {
 
                     return ListTile(
                       title: Text(myList[index].toString()),
-                      trailing: IconButton(icon: Icon(Icons.add), onPressed: (){
-                        Provider.of<CartModel>(context,listen: false).add(myList[index].toString());
-                      }),
+                      trailing: AnimatedCrossFade(
+                          firstChild: addIntoCartView(context,myList[index].toString()),
+                          secondChild: addedCartView(),
+                          crossFadeState: Provider.of<CartModel>(context,listen: false).allItem.contains(myList[index]) ? CrossFadeState.showSecond : CrossFadeState.showFirst,
+                          duration: Duration(seconds: 1)),
                     );
                   }, separatorBuilder: (BuildContext context, int index) {
                   return Divider(height: 2,color: Colors.black,);
@@ -157,6 +159,15 @@ class _MyCounterHomeAppState extends State<MyCounterHomeApp> {
       ),
 
     );
+  }
+  
+  Widget addIntoCartView(BuildContext context,String name){
+    return IconButton(icon: Icon(Icons.add), onPressed: (){
+  Provider.of<CartModel>(context,listen: false).add(name.toString());
+  });
+}
+  Widget addedCartView(){
+    return Icon(Icons.check,color: Colors.green,);
   }
 }
 
